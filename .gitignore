@@ -1,0 +1,10 @@
+
+# Directories
+.idea/
+venv/
+.vscode/
+
+# Files
+*.pyc
+.env
+Dockerfile
