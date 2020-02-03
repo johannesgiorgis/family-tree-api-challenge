@@ -14,7 +14,7 @@ paths:
   # health check
   /health_check:
     get:
-      operationId: family_tree.views.health_check.health_check
+      operationId: family_tree.api.health_check.health_check
       tags:
         - HealthCheck
       summary: Check the API health
@@ -26,7 +26,7 @@ paths:
   # all people
   /people:
     get:
-      operationId: family_tree.views.people.read_all
+      operationId: family_tree.api.people.read_all
       tags:
         - People
       summary: Read the entire set of people, sorted by last name
@@ -64,7 +64,7 @@ paths:
                   description: Create timestamp of the person
 
     post:
-      operationId: family_tree.views.people.create
+      operationId: family_tree.api.people.create
       tags:
         - People
       summary: Create a person
@@ -128,7 +128,7 @@ paths:
   # individual person
   /people/{last_name}:
     get:
-      operationId: family_tree.views.people.read_one
+      operationId: family_tree.api.people.read_one
       tags:
         - People
       summary: Read a person
@@ -170,7 +170,7 @@ paths:
                 description: Create timestamp of the person
 
     put:
-      operationId: family_tree.views.people.update
+      operationId: family_tree.api.people.update
       tags:
         - People
       summary: Update a person in the people list
@@ -209,7 +209,7 @@ paths:
           description: Successfully updated person in people list operation
 
     delete:
-      operationId: family_tree.views.people.delete
+      operationId: family_tree.api.people.delete
       tags:
         - People
       summary: Delete a person frpm the people list
