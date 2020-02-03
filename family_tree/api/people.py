@@ -6,44 +6,15 @@ from datetime import datetime
 
 from flask import abort, make_response
 
+# from family_tree.data.people import Person, PersonSchema
+import family_tree.services.people_service as people_service
+
 
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
 
 
-# Data to serve with our API
-PEOPLE = {
-    "Farrell": {
-        "person_id": 1,
-        "first_name": "Doug",
-        "last_name": "Farrell",
-        "phone_number": "",
-        "email": "",
-        "address": "",
-        "birth_date": "",
-        "timestamp": get_timestamp(),
-    },
-    "Brockman": {
-        "person_id": 2,
-        "first_name": "Kent",
-        "last_name": "Brockman",
-        "phone_number": "",
-        "email": "",
-        "address": "",
-        "birth_date": "",
-        "timestamp": get_timestamp(),
-    },
-    "Easter": {
-        "person_id": 3,
-        "first_name": "Bunny",
-        "last_name": "Easter",
-        "phone_number": "",
-        "email": "",
-        "address": "",
-        "birth_date": "",
-        "timestamp": get_timestamp(),
-    },
-}
+# ################### /people #################################
 
 
 def read_all():
@@ -53,73 +24,76 @@ def read_all():
 
     :return:    json string of list of people
     """
-    return [PEOPLE[key] for key in sorted(PEOPLE.keys())]
-
-
-def read_one(last_name: str):
-    """
-    This function responds to a request for /api/people/{last_name}
-    with one matching person from people
-
-    :param lname:   last name of person to find
-    :return:        person matching last name
-    """
-    if last_name in PEOPLE:
-        person = PEOPLE.get(last_name)
-    else:
-        abort(404, f"Person with last name {last_name} not found")
-
-    return person
+    return people_service.get_people()
 
 
 def create(person: dict):
     """
-    This function responds to a request for /api/people/
+    This function responds to a request for /api/people
 
     :param person:  person to create
     :return:        201 on success, 406 on person exists
     """
-    first_name = person.get("first_name", None)
-    last_name = person.get("last_name", None)
 
-    if last_name not in PEOPLE and last_name is not None:
-        person_id = len(PEOPLE) + 1
-        dynamic_data = {"person_id": person_id, "timestamp": get_timestamp()}
-        PEOPLE[last_name] = {**person, **dynamic_data}
+    # Check for existing person
+    new_person = people_service.create_new_person(person)
 
-        return PEOPLE[last_name], 201
+    if not new_person:
+        abort(409, f"Person '{person.get('first_name')} {person.get('last_name')}' already exists")
 
     else:
-        abort(406, f"Person with last name {last_name} already exists")
+        return new_person, 201
 
 
-def update(last_name: str, person: dict):
+# ################### /people/<person_id> #################################
+
+
+def read_one(person_id: int):
+    """
+    This function responds to a request for /api/people/{person_id}
+    with one matching person from people
+
+    :param person_id:   ID of person to find
+    :return:            person matching person ID
+    """
+    person = people_service.get_person(person_id)
+
+    if not person:
+
+        abort(404, f"Person with ID '{person_id}' not found")
+
+    else:
+        return person
+
+
+def update(person_id: int, person: dict):
     """
     This function updates an existing person in the people structure
 
-    :param last_name:   Last name of the person to update
+    :param person_id:   ID of the person to update
     :param person:      person to update
     :return:            updated person structure
     """
-    if last_name in PEOPLE:
-        PEOPLE[last_name]["first_name"] = person.get("first_name")
-        PEOPLE[last_name]["timestamp"] = get_timestamp()
 
-        return PEOPLE[last_name]
+    updated_person = people_service.update_person(person_id, person)
+
+    if not updated_person:
+        abort(404, f"Person with ID {person_id} not found")
 
     else:
-        abort(404, f"Person with last name {last_name} not found")
+        return updated_person, 200
 
 
-def delete(last_name: str):
+def delete(person_id: int):
     """
     This function deletes a person from the people structure
 
-    :param last_name:   last name of person to delete
+    :param person_id:   ID of person to delete
     :return:            200 on successful delete, 404 if not found
     """
-    if last_name in PEOPLE:
-        del PEOPLE[last_name]
-        return make_response(f"{last_name} successfully deleted")
+
+    if people_service.delete_person(person_id):
+        return make_response(f"Person {person_id} successfully deleted")
+
     else:
-        abort(404, f"Person with last name {last_name} not found")
+        abort(404, f"Person with ID {person_id} not found")

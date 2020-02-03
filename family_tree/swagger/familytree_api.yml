@@ -126,7 +126,7 @@ paths:
                 description: Create timestamp of the person
 
   # individual person
-  /people/{last_name}:
+  /people/{person_id}:
     get:
       operationId: family_tree.api.people.read_one
       tags:
@@ -134,10 +134,10 @@ paths:
       summary: Read a person
       description: Read a person
       parameters:
-        - name: last_name
+        - name: person_id
           in: path
-          description: Last name of the person to get from the list
-          type: string
+          description: ID of the person to get from the list
+          type: integer
           required: True
       responses:
         200:
@@ -176,10 +176,10 @@ paths:
       summary: Update a person in the people list
       description: Update a person in the people list
       parameters:
-        - name: last_name
+        - name: person_id
           in: path
           description: Last name of the person to get from the list
-          type: string
+          type: integer
           required: True
         - name: person
           in: body
@@ -215,10 +215,10 @@ paths:
       summary: Delete a person frpm the people list
       description: Delete a person from the people list
       parameters:
-        - name: last_name
+        - name: person_id
           in: path
           description: Last name of the person to delete from the list
-          type: string
+          type: integer
           required: True
       responses:
         200:

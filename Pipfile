@@ -12,3 +12,8 @@ pytest = "*"
 flask-cors = "*"
 python-dotenv = "*"
 connexion = {extras = ["swagger-ui"],version = "*"}
+sqlalchemy = "*"
+flask-sqlalchemy = "*"
+flask-marshmallow = "*"
+marshmallow-sqlalchemy = "*"
+marshmallow = "*"
