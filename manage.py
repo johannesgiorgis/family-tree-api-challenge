@@ -3,7 +3,7 @@ from family_tree.app import create_app
 
 def run_app():
     app = create_app()
-    app.run()
+    app.run(debug=True)
 
 
 if __name__ == "__main__":
