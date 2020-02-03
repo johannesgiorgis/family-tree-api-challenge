@@ -11,6 +11,19 @@ produces:
 basePath: /api
 
 paths:
+  # health check
+  /health_check:
+    get:
+      operationId: family_tree.views.health_check.health_check
+      tags:
+        - HealthCheck
+      summary: Check the API health
+      description: Check the health of the API Web Service
+      responses:
+        200:
+          description: API is available
+
+  # all people
   /people:
     get:
       operationId: family_tree.views.people.read_all
@@ -112,6 +125,7 @@ paths:
                 type: string
                 description: Create timestamp of the person
 
+  # individual person
   /people/{last_name}:
     get:
       operationId: family_tree.views.people.read_one
