@@ -7,4 +7,3 @@ venv/
 # Files
 *.pyc
 .env
-Dockerfile
