@@ -1,33 +1,43 @@
+"""
+People Model & Schema
+---------------------
+"""
+
 from datetime import datetime
-import sqlalchemy as sa
-from flask_marshmallow import Marshmallow
 
-from family_tree.data.modelbase import SqlAlchemyBase
-
-ma = Marshmallow()
+from family_tree.config import db, ma
 
 
-class Person(SqlAlchemyBase):
+class Person(db.Model):
 
     __tablename__ = "people"
 
-    id: int = sa.Column(sa.Integer, primary_key=True)
+    id: int = db.Column(db.Integer, primary_key=True)
 
-    first_name: str = sa.Column(sa.String, nullable=False)
-    last_name: str = sa.Column(sa.String, nullable=False)
+    first_name: str = db.Column(db.String, nullable=False)
+    last_name: str = db.Column(db.String, nullable=False)
 
-    phone_number: str = sa.Column(sa.String, nullable=True)
-    email: str = sa.Column(sa.String, nullable=True)
-    address: str = sa.Column(sa.String, nullable=True)
-    birth_date: str = sa.Column(sa.Date, nullable=True)
+    phone_number: str = db.Column(db.String, nullable=True)
+    email: str = db.Column(db.String, nullable=True)
+    address: str = db.Column(db.String, nullable=True)
+    birth_date: str = db.Column(db.Date, nullable=True)
 
-    created_timestamp: datetime = sa.Column(sa.DateTime, default=datetime.utcnow)
-    updated_timestamp: datetime = sa.Column(
-        sa.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    created_timestamp: datetime = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_timestamp: datetime = db.Column(
+        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
 
-    # relationships: parents
-    # relationships: children
+    # # relationships: parents
+    # parents = db.relationship("Person", secondary="parentchildrelation")
+    # parents = db.relationship(
+    #     "Person",
+    #     secondary="parentchildrelation",
+    #     primaryjoin="Person.id==parentchildrelation.c.parent_id",
+    #     secondaryjoin="Person.id==parentchildrelation.c.child_id",
+    #     lazy="joined",
+    # )
+    # # relationships: children
+    # children = orm.relation("Person", secondary="ParentChildRelationship")
 
     def __repr__(self):
         return f"<Person {self.id}>"

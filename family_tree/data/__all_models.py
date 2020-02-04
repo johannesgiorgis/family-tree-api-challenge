@@ -5,3 +5,6 @@
 
 # noinspection PyUnresolvedReferences
 import family_tree.data.people
+
+# noinspection PyUnresolvedReferences
+import family_tree.data.relationship
