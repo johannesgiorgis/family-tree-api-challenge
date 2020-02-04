@@ -1,3 +1,97 @@
+# Family Tree REST API
+
+This coding challenge involved building a Family Tree API to handle people and their connections (parent(s), siblings, children, grandchildren and cousins).
+
+**Note**:
+
+While working on the Parent Child Relationship, I came across an error I was unable to resolve:
+
+```bash
+sqlalchemy.exc.InvalidRequestError: When initializing mapper mapped class, expression failed to locate a name ("name 'parentchildrelation' is not defined"). If this is a class name, consider adding this relationship() to the <class 'family_tree.data.people.Person'> class after both dependent classes have been defined.
+```
+
+Even after replicating the models from [Family Tree API Github Repo](https://github.com/alysivji/flask-family-tree-api), I was unable to get it working while verifying running that repo's application did work although it never generated a database. I will endeavour to gain a deeper understanding of SQLAlchemy's many to many relationships and resolve this blocker as I ended up spending getting that and testing to work.
+
+## How to Run
+
+If you have docker installed, a `Makefile` is provided to quickly build and run the Docker image defined in `Dockerfile`.
+
+```bash
+# Build
+$ docker build --rm --no-cache -t family-tree-api:1.0 .
+
+# Run
+$ docker run -it --rm -p 5000:5000 family-tree-api:1.0
+```
+
+OR
+
+```bash
+$ make docker-build
+...
+$ make docker-run
+```
+
+## REST API
+
+Using Connexion was very helpful as it resulted in a UI for the API:
+
+![REST API Swagger UI](img/family-tree-api-swagger-ui.png)
+
+
+Below is the REST API I designed and was implementing.
+
+| ACTION | HTTP VERB | URL PATH                   | DESCRIPTION                            |
+| :----: | :-------: | :------------------------- | :------------------------------------- |
+| CREATE |   POST    | /person                    | Create a person                        |
+|  READ  |    GET    | /person                    | Get everyone                           |
+|  READ  |    GET    | /person/<id>               | Get a person                           |
+| UPDATE |  UPDATE   | /person/<id>               | Update a person                        |
+| DELETE |  DELETE   | /person/<id>               | Delete a person                        |
+| DELETE |    GET    | /parents/<person_id>       | Get a list of a person's siblings      |
+| UPDATE |    PUT    | /parent/<person_id>        | Update a person's parent               |
+|  READ  |    GET    | /cousins/<person_id>       | Get a list of a person's cousins       |
+| DELETE |    GET    | /grandparents/<person_id>  | Get a list of a person's grandparents  |
+| DELETE |    GET    | /siblings/<person_id>      | Get a list of a person's siblings      |
+| DELETE |  DELETE   | /relationships/<person_id> | Get a list of a person's relationships |
+
+
+## Tools Used
+
+- Flask
+- SQLAlchemy
+- Connexion
+- Pytest
+- Marshmallow
+
+## Steps
+
+- [x] Create Person Model
+- [x] Create Person API
+- [ ] Create Parent Child Relationship Model
+- [ ] Create Person's Relationship API
+- [ ] Create tests
+  - [ ] Test Models
+  - [ ] Test APIs
+  - [x] Test Health Check
+- [ ] Logging
+- [ ] Database Migrations
+- [ ] Contextual Validation 
+  - [ ] Ensure age is appropriate for parent vs child
+  - [ ] Ensure only 0 - 2 parents allowed
+- [x] Dockerfile
+
+
+## Resources
+
+- [Python REST APIs with Flask, Connexion, and SQLAlchemy](https://realpython.com/flask-connexion-rest-api/)
+- [Connexion Example App](https://github.com/hjacobs/connexion-example)
+- [Testing a Flask Application using Pytest](https://www.patricksoftwareblog.com/testing-a-flask-application-using-pytest/)
+- [Flask Documentation](https://flask.palletsprojects.com/en/1.1.x/)
+- [Testing Flask Applications](https://flask.palletsprojects.com/en/1.1.x/testing/)
+
+----
+
 # be-coding-challenge
 
 ### Expectations
